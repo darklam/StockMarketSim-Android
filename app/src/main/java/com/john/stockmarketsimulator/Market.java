@@ -1,5 +1,6 @@
 package com.john.stockmarketsimulator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,6 +12,8 @@ public class Market {
     protected List<Stock> stocks;
 
     public Market(){
-        //TODO have a file as input which contains the initial data about the stocks
+        //TODO have initial stock info in SQLite database
+        stocks = new ArrayList<>();
+
     }
 }
