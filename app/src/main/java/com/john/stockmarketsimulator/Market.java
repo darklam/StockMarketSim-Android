@@ -2,7 +2,9 @@ package com.john.stockmarketsimulator;
 
 import android.content.Context;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,15 +24,31 @@ public class Market {
         stocks.add(new Stock("AMD"));
     }
 
+    public int getStockCount(){
+        return stocks.size();
+    }
+
+    public String getName(int index){
+        return stocks.get(index).getName();
+    }
+
+    public float getPrice(int index){
+        return stocks.get(index).getPrice();
+    }
+
     public void saveStocks(Context ctx){
         DatabaseOperations op = new DatabaseOperations(ctx);
-        for(int i = 0; i < stocks.size(); i++){
-            op.execute("add_stock", stocks.get(i).getName(), Float.toString(stocks.get(i).getPrice()));
+        String[] params = new String[stocks.size() * 2];
+        int stock = 0;
+        for(int i = 0; i < params.length; i += 2){
+            params[i] = stocks.get(stock).getName();
+            params[i + 1] = Float.toString(stocks.get(stock).getPrice());
+            stock++;
         }
+        op.execute(params);
     }
 
     public void loadFromDatabase(Context ctx){
-        DatabaseOperations op = new DatabaseOperations(ctx);
-
+        //Currently empty
     }
 }

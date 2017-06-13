@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by john on 13/6/2017.
@@ -35,11 +36,17 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         return true;
     }
 
-    public String[] getDatabase(SQLiteDatabase db){ //Not finished yet
-        String[] res = null;
-        String command = "from " + MarketContract.MarketEntry.STOCK_TABLE_NAME + " select ?";
-        Cursor cur = db.rawQuery(command, new String[] {"*"});
-
+    public Stock[] getDatabase(SQLiteDatabase db){ //Not finished yet
+        Stock[] res = null;
+        String command = "select * from " + MarketContract.MarketEntry.STOCK_TABLE_NAME;
+        Cursor cur = db.rawQuery(command, null);
+        res = new Stock[cur.getCount()];
+        int count = 0;
+        while(cur.moveToNext()){
+            int indexName = cur.getColumnIndexOrThrow(MarketContract.MarketEntry.STOCK_COLUMN_NAME);
+            int indexPrice = cur.getColumnIndexOrThrow(MarketContract.MarketEntry.STOCK_COLUMN_PRICE);
+            res[count] = new Stock(cur.getString(indexName), cur.getFloat(indexPrice));
+        }
         cur.close();
         return res;
     }
