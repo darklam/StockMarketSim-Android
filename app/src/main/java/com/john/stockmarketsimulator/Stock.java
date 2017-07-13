@@ -15,6 +15,13 @@ public class Stock {
         this.price = price;
     }
 
+    public String getStockInfo(){
+        String out = "";
+        out += this.name + "-";
+        out += Float.toString(this.price) + "\n";
+        return out;
+    }
+
     public Stock(String name){
         Random r = new Random();
         this.name = name;

@@ -15,10 +15,10 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "StockMarket.db";
     public static final String SQL_CREATE_MAIN_TABLE =
-            "CREATE TABLE " + MarketContract.MarketEntry.STOCK_TABLE_NAME + " ("
-            + MarketContract.MarketEntry.STOCK_COLUMN_NAME + " TEXT,"
-            + MarketContract.MarketEntry.STOCK_COLUMN_PRICE + " REAL)";
-    public static final String SQL_DELETE_MAIN_ENTRIES = "DROP TABLE IF EXISTS " + MarketContract.MarketEntry.STOCK_TABLE_NAME;
+            "create table " + MarketContract.MarketEntry.STOCK_TABLE_NAME + " ("
+            + MarketContract.MarketEntry.STOCK_COLUMN_NAME + " text,"
+            + MarketContract.MarketEntry.STOCK_COLUMN_PRICE + " real)";
+    public static final String SQL_DELETE_MAIN_ENTRIES = "drop table if exists " + MarketContract.MarketEntry.STOCK_TABLE_NAME;
 
     public DatabaseHelper(Context ctx){
         super(ctx, MarketContract.MarketEntry.STOCK_TABLE_NAME, null, DATABASE_VERSION);
@@ -40,15 +40,21 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         Stock[] res = null;
         String command = "select * from " + MarketContract.MarketEntry.STOCK_TABLE_NAME;
         Cursor cur = db.rawQuery(command, null);
+        Log.i("count", Integer.toString(cur.getCount()));
         res = new Stock[cur.getCount()];
         int count = 0;
+        int indexName = cur.getColumnIndexOrThrow(MarketContract.MarketEntry.STOCK_COLUMN_NAME);
+        int indexPrice = cur.getColumnIndexOrThrow(MarketContract.MarketEntry.STOCK_COLUMN_PRICE);
         while(cur.moveToNext()){
-            int indexName = cur.getColumnIndexOrThrow(MarketContract.MarketEntry.STOCK_COLUMN_NAME);
-            int indexPrice = cur.getColumnIndexOrThrow(MarketContract.MarketEntry.STOCK_COLUMN_PRICE);
             res[count] = new Stock(cur.getString(indexName), cur.getFloat(indexPrice));
+            count++;
         }
         cur.close();
         return res;
+    }
+
+    public void deleteDatabase(SQLiteDatabase db){
+        db.execSQL(SQL_DELETE_MAIN_ENTRIES);
     }
 
     public void updateDb(String entry, float newValue, SQLiteDatabase db){

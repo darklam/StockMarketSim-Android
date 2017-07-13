@@ -12,5 +12,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Market test = new Market();
         test.saveStocks(this);
+        Stock[] st = test.getStockArray(this);
+        Log.i("start", "started");
+        Log.i("wut", Integer.toString(st.length));
+        for(int i = 0; i < st.length; i++){
+            Log.i("wut", Integer.toString(i));
+            Log.i("stockinfo", st[i].getStockInfo());
+        }
+
     }
 }
